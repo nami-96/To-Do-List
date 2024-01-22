@@ -12,17 +12,17 @@ const UNCHECK = "fa-circle-thin"; // ..
 const LINE_THROUGH = "lineThrough"; // ..
 
 // Variables
-let LIST, id;
-
+let LIST, id; // first pass, LIST =+
 // get item from localstorage
 let data = localStorage.getItem("TODO"); // data = null
+
 // check if data is not empty
 if(data) { // data = null
+
     LIST = JSON.parse(data);
     id = LIST.length; // set the id to the last one in the list
     loadList(LIST); // load the list to the user interface // [{name: "", id: "", done: false, trash: false}]
 } else {
-    console.log("i went here");
     // if data isn't empty
     LIST = []; // LIST = []
     // LIST = [1,2,3]
@@ -31,33 +31,40 @@ if(data) { // data = null
     id = 0; // id = 0
 }
 
+// // you are javascript creator, then u defined array.forEach
+// const array = [1,2,3];
+// function array.forEach(callbackFn) { // callbackfn = addItemToTodo
+//     for (let i = 0; i < array.length; i++) { // i = 0
+//         callbackFn(array[i], i, array) // first_param = 1, second_param = 0, third_param = [1,2,3]
+//     }
+// }
 // load items to the user's interface
 function loadList(array) {
-    array.forEach(function(item) { // item = {name: "", id: "", done: false, trash: false}
+    array.forEach(function (item) { 
         addToDo(item.name, item.id, item.done, item.trash);
     });
 }
 
 // clear the local storage
-clear.addEventListener("click", function(){
+clear.addEventListener("click", function() {
     localStorage.clear();
     location.reload();
 });
 
 // Show todays date
 const options = {weekday : "long", month:"short", day:"numeric"};
-const today = new Date();
+const today = new Date(); // { toLocaleDateString: function (locale, options) }
 
 dateElement.innerHTML = today.toLocaleDateString("en-US", options);
-
 // add to do function
 
-function addToDo(toDo, id, done, trash){
+function addToDo(toDo, id, done, trash) {
     
     if(trash){ return; }
     
     const DONE = done ? CHECK : UNCHECK;
     const LINE = done ? LINE_THROUGH : "";
+    
     
     const item = `<li class="item">
                     <i class="fa ${DONE} co" job="complete" id="${id}"></i>
@@ -66,14 +73,15 @@ function addToDo(toDo, id, done, trash){
                   </li>
                 `;
     
-    const position = "beforeend";
+    const position = "beforeend"; 
     
     list.insertAdjacentHTML(position, item);
+    
 }
-const nabil = "123";
 
 // add an item to the list user the enter key
-document.addEventListener("keyup",function(even){
+document.addEventListener("keyup", function(event){
+    //console.log("event is...", event);
     if(event.keyCode == 13){
         const toDo = input.value;
         
@@ -90,10 +98,10 @@ document.addEventListener("keyup",function(even){
             
             // add item to localstorage ( this code must be added where the LIST array is updated)
             localStorage.setItem("TODO", JSON.stringify(LIST));
-            
             id++;
         }
-        input.value = "";
+        input.value = ""; //clears back the input
+        
     }
 });
 
@@ -110,7 +118,6 @@ function completeToDo(element){
 // remove to do
 function removeToDo(element){
     element.parentNode.parentNode.removeChild(element.parentNode);
-    
     LIST[element.id].trash = true;
 }
 
@@ -119,6 +126,7 @@ function removeToDo(element){
 list.addEventListener("click", function(event){
     const element = event.target; // return the clicked element inside list
     const elementJob = element.attributes.job.value; // complete or delete
+    console.log(element.attributes)
     
     if(elementJob == "complete"){
         completeToDo(element);
@@ -128,22 +136,6 @@ list.addEventListener("click", function(event){
     
     // add item to localstorage ( this code must be added where the LIST array is updated)
     localStorage.setItem("TODO", JSON.stringify(LIST));
+    console.log(JSON.stringify(LIST))
+    console.log(JSON.stringify(localStorage))
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
